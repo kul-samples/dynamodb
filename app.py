@@ -12,7 +12,7 @@ app.secret_key = 'your secret key'
 region_name = os.getenv("REGION_NAME")
 
 dynamodb = boto3.resource('dynamodb',
-                    region_name=REGION_NAME)
+                    region_name=region_name)
 
 
 from boto3.dynamodb.conditions import Key, Attr
