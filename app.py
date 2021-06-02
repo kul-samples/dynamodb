@@ -11,6 +11,8 @@ app = Flask(__name__)
 app.secret_key = 'your secret key'
 
 region_name = os.getenv("REGION_NAME")
+PORT_NUMBER = os.getenv("PORT_NUMBER")
+
 
 dynamodb = boto3.resource('dynamodb',
                     region_name=region_name)
@@ -104,5 +106,5 @@ def logout():
 
 if __name__ == "__main__":
     
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=PORT_NUMBER, debug=True)
 
