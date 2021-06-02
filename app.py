@@ -57,13 +57,7 @@ def users():
             ExpressionAttributeNames={ "#em": "email" , "#na": "name"})
         
         items = response['Items']
-                
-        
-        print(items)
             
-        
-       
-       
     return render_template('user.html', items=items)
 
 
