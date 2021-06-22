@@ -7,7 +7,6 @@ import boto3
 from flask_session.__init__ import Session
 
 app = Flask(__name__)
-app.secret_key = 'your secret key'
 
 region_name = os.getenv("REGION_NAME")
 PORT_NUMBER = os.getenv("PORT_NUMBER")
