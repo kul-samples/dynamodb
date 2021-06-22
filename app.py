@@ -1,7 +1,8 @@
+# importing required libraries
+
 import os
 from flask import Flask, render_template, request, session, redirect,url_for
 import key_config as keys
-#from dynamoDB_create_table import *
 from botocore.exceptions import ClientError
 import boto3 
 from flask_session.__init__ import Session
@@ -10,6 +11,8 @@ app = Flask(__name__)
 app.secret_key = 'your secret key'
 
 region_name = os.getenv("REGION_NAME")
+PORT_NUMBER = os.getenv("PORT_NUMBER")
+
 
 dynamodb = boto3.resource('dynamodb',
                     region_name=region_name)
@@ -17,10 +20,8 @@ dynamodb = boto3.resource('dynamodb',
 
 from boto3.dynamodb.conditions import Key, Attr
 
-#@app.route('/')
-#def index():
-#    return render_template('index.html')
 
+#code to insert data in dynamodb
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -45,32 +46,20 @@ def signup():
     return render_template('index.html')
 
 
+
+#code to display users from dynamodb
+
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     email = " "
     if request.method == 'GET':
         table = dynamodb.Table('users')
 
-        #response = table.get_item(Key={'email': 'ybhatia128@gmail.com'})
-        #item = response['Item']
-        #print(item)
-
-        #print(table.item_count)
         response = table.scan(ProjectionExpression="#em, #na",
             ExpressionAttributeNames={ "#em": "email" , "#na": "name"})
         
-        #response = table.query(
-        #KeyConditionExpression=Key('email').eq('ybhatia128@gmail.com'))
-        #print(response['Items'])
-        #FilterExpression=Attr('name').eq('name'))
         items = response['Items']
-                
-        #for item in items:
-        print(items)
-            #item = resp['Items']
-        
-       
-       
+            
     return render_template('user.html', items=items)
 
 
@@ -79,6 +68,9 @@ def users():
 @app.route('/login')
 def login():    
     return render_template('login.html')
+
+
+#code for authentication 
 
 
 @app.route('/home',methods=['GET', 'POST'])
@@ -102,9 +94,7 @@ def home():
 
     return render_template("login.html")
 
-#@app.route('/home')
-#def home():
-#    return render_template('home.html')
+
 
 @app.route("/logout",methods=['GET', 'POST'])  
 def logout():  
@@ -116,5 +106,5 @@ def logout():
 
 if __name__ == "__main__":
     
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=PORT_NUMBER, debug=True)
 
